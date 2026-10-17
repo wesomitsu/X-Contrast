@@ -1,0 +1,21 @@
+name: X-Contrast
+description: Check WCAG color contrast in the CSS changed by a pull request and comment the results.
+branding:
+  icon: eye
+  color: purple
+inputs:
+  token:
+    description: Token used to read the PR and post the comment
+    default: ${{ github.token }}
+  level:
+    description: AA or AAA
+    default: AA
+  comment:
+    description: Post (or update) a comment on the PR
+    default: 'true'
+  fail-on-error:
+    description: Fail the job when a pair misses the level
+    default: 'true'
+runs:
+  using: node20
+  main: src/main.js
