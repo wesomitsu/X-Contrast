@@ -3,7 +3,7 @@
 A GitHub Action that checks the color contrast of CSS changed in a pull request.
 It finds rules that set both `color` and a background, checks each pair against
 [WCAG 2.x](https://www.w3.org/TR/WCAG21/#contrast-minimum), and posts one comment
-on the PR with the results (updated on every push, never duplicated).
+on the PR with the results and a suggested fix for each failing pair (updated on every push, never duplicated).
 
 ## Usage
 
@@ -29,10 +29,10 @@ The comment looks like this:
 
 > ### X-Contrast: 1 of 2 color pairs fail WCAG AA
 >
-> | | Where | Selector | Colors | Ratio |
-> |---|---|---|---|---|
-> | ✅ | `examples/demo.css:2` | `.button-primary` | `#ffffff` on `#1d4ed8` | 6.70:1 |
-> | ❌ | `examples/demo.css:3` | `.hint` | `#94a3b8` on `#ffffff` | 2.56:1 |
+> | | Where | Selector | Colors | Ratio | Try |
+> |---|---|---|---|---|---|
+> | ✅ | `examples/demo.css:2` | `.button-primary` | `#ffffff` on `#1d4ed8` | 6.70:1 |  |
+> | ❌ | `examples/demo.css:3` | `.hint` | `#94a3b8` on `#ffffff` | 2.56:1 | `#6c7786` |
 
 ## Inputs
 
