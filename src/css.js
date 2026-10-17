@@ -1,6 +1,6 @@
 import { parseColor } from './contrast.js';
 
-const COLOR_TOKEN = /#[\da-f]{3,6}\b|rgb\([^)]*\)|hsl\([^)]*\)|\b(?:black|white)\b/gi;
+const COLOR_TOKEN = /#[\da-f]{3,8}\b|rgba?\([^)]*\)|hsla?\([^)]*\)|\b(?:black|white|transparent)\b/gi;
 
 // Finds rules that set both a text color and a background color, and
 // returns { selector, line, text, background } for each one.
