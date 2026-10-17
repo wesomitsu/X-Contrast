@@ -19,6 +19,11 @@ inputs:
   fail-on-error:
     description: Fail the job when a pair misses the level
     default: 'true'
+outputs:
+  checked:
+    description: Number of color pairs checked
+  failures:
+    description: Number of pairs that missed the level
 runs:
   using: node20
   main: src/main.js

@@ -44,6 +44,21 @@ The same table is added to the run's summary page. The comment looks like this:
 | `fail-on-error` | `true` | Fail the job when a pair misses the level |
 | `token` | `github.token` | Token used to read the PR and write the comment |
 
+## Outputs
+
+| Output | What it is |
+|---|---|
+| `checked` | Number of color pairs checked |
+| `failures` | Number of pairs that missed the level |
+
+```yaml
+- uses: wesomitsu/X-Contrast@main
+  id: contrast
+  with:
+    fail-on-error: 'false'
+- run: echo "${{ steps.contrast.outputs.failures }} contrast issues"
+```
+
 ## What it understands
 
 - Files: `.css`, `.scss`, and `<style>` blocks in `.html`, `.vue`, `.svelte` and `.astro`
