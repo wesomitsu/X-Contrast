@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { run } from '../src/main.js';
+import { annotation, run } from '../src/main.js';
 
 function setup(files) {
   const dir = mkdtempSync(join(tmpdir(), 'xc-'));
@@ -77,4 +77,9 @@ test('sets checked and failures outputs', async () => {
   env.GITHUB_OUTPUT = join(mkdtempSync(join(tmpdir(), 'xc-')), 'out');
   await run({ env, client });
   assert.equal(readFileSync(env.GITHUB_OUTPUT, 'utf8'), 'checked=2\nfailures=1\n');
+});
+
+test('formats a line annotation for failures', () => {
+  const line = annotation({ file: 'a,b.css', line: 4, selector: '.x', text: '#777', background: '#fff', ratio: 4.48, suggestion: '#767676' }, 'AA');
+  assert.equal(line, '::error file=a%2Cb.css,line=4,title=Contrast below WCAG AA::.x: #777 on #fff is 4.48:1. Try #767676.');
 });
