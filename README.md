@@ -38,7 +38,7 @@ The comment looks like this:
 
 | Input | Default | What it does |
 |---|---|---|
-| `level` | `AA` | `AA` (4.5:1) or `AAA` (7:1), for normal text |
+| `level` | `AA` | `AA` (4.5:1, or 3:1 for large text) or `AAA` (7:1, or 4.5:1) |
 | `comment` | `true` | Post or update the PR comment |
 | `fail-on-error` | `true` | Fail the job when a pair misses the level |
 | `token` | `github.token` | Token used to read the PR and write the comment |
@@ -50,6 +50,7 @@ The comment looks like this:
 - See-through text is blended over its background; a see-through background is assumed to sit on white
 - Properties: `color` with `background-color` or `background` in the same rule
 - CSS variables defined in the same file, including `var(--x, fallback)`
+- Large text: `font-size` of 24px+, or 18.66px+ with bold, in the same rule (px, pt, rem/em at 16px)
 - Other named colors are skipped
 
 On pull requests from forks, the default token can't write comments. Set

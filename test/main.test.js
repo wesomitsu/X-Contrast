@@ -38,3 +38,8 @@ test('measures see-through text against its background', async () => {
   assert.equal(await run({ env, client }), 1);
   assert.match(comments[0].body, /3\.95:1/);
 });
+
+test('uses the 3:1 large-text threshold', async () => {
+  const { env, client } = setup({ 'a.css': '.x { color: #777; background: #fff; font-size: 32px; }' });
+  assert.equal(await run({ env, client }), 0);
+});
