@@ -10,6 +10,9 @@ inputs:
   level:
     description: AA or AAA
     default: AA
+  paths:
+    description: Only check files under these folders (comma or newline separated)
+    default: ''
   comment:
     description: Post (or update) a comment on the PR
     default: 'true'

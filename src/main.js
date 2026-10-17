@@ -18,7 +18,12 @@ export async function run({ env = process.env, client } = {}) {
   if (level !== 'AA' && level !== 'AAA') throw new Error('level must be AA or AAA');
   const gh = client ?? createClient({ token: input('token'), repo: env.GITHUB_REPOSITORY });
 
-  const files = (await gh.changedFiles(pr.number)).filter((f) => isCheckable(f.filename) && f.status !== 'removed');
+  // Optional comma/newline separated folder or file prefixes, e.g. "src/styles, app/".
+  const paths = input('paths').split(/[\n,]/).map((p) => p.trim().replace(/^\.\//, '')).filter(Boolean);
+  const inPaths = (name) => paths.length === 0 || paths.some((p) => name === p || name.startsWith(p.endsWith('/') ? p : `${p}/`));
+  const files = (await gh.changedFiles(pr.number)).filter(
+    (f) => isCheckable(f.filename) && f.status !== 'removed' && inPaths(f.filename),
+  );
   const results = [];
   for (const file of files) {
     const css = extractCss(file.filename, await gh.fileContent(file.filename, pr.head.sha));

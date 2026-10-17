@@ -49,3 +49,18 @@ test('suggests a passing text color', async () => {
   await run({ env, client });
   assert.match(comments[0].body, /\| `#767676` \|/);
 });
+
+test('paths limits which files are checked', async () => {
+  const { env, client, comments } = setup({
+    'src/styles/a.css': '.x { color: #000; background: #fff; }',
+    'src/stylesheet.css': '.y { color: #777; background: #fff; }',
+    'legacy/b.css': '.z { color: #777; background: #fff; }',
+  });
+  process.env.INPUT_PATHS = './src/styles';
+  try {
+    assert.equal(await run({ env, client }), 0);
+    assert.match(comments[0].body, /all 1 color pairs pass/);
+  } finally {
+    delete process.env.INPUT_PATHS;
+  }
+});
