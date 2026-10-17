@@ -12,8 +12,8 @@ test('finds rules with both colors, with line numbers', () => {
   .d { background-color: rgb(0, 0, 0) !important; color: white }
 }`;
   assert.deepEqual(findColorPairs(css), [
-    { selector: '.a', line: 2, text: '#777', background: '#fff' },
-    { selector: '.c, .d', line: 6, text: 'white', background: 'rgb(0, 0, 0)' },
+    { selector: '.a', line: 2, text: '#777', background: '#fff', large: false },
+    { selector: '.c, .d', line: 6, text: 'white', background: 'rgb(0, 0, 0)', large: false },
   ]);
 });
 
@@ -32,4 +32,12 @@ test('resolves CSS variables, fallbacks and nested variables', () => {
     ['.a', '#1d4ed8', '#fff'],
     ['.b', '#777', 'white'],
   ]);
+});
+
+test('detects large text', () => {
+  const css = `.a { color: #000; background: #fff; font-size: 24px; }
+.b { color: #000; background: #fff; font-size: 14pt; font-weight: bold; }
+.c { color: #000; background: #fff; font-size: 1.25rem; font-weight: 700; }
+.d { color: #000; background: #fff; font-size: 18px; font-weight: 700; }`;
+  assert.deepEqual(findColorPairs(css).map((p) => p.large), [true, true, true, false]);
 });

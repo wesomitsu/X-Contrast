@@ -59,4 +59,5 @@ export function contrastRatio(a, b) {
   return (hi + 0.05) / (lo + 0.05);
 }
 
-export const THRESHOLDS = { AA: 4.5, AAA: 7 };
+// Minimum ratios for normal and large text (24px+, or 18.66px+ bold).
+export const THRESHOLDS = { AA: { normal: 4.5, large: 3 }, AAA: { normal: 7, large: 4.5 } };

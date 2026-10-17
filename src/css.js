@@ -12,6 +12,8 @@ export function findColorPairs(css) {
   for (const m of clean.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
     let text = null;
     let background = null;
+    let size = null;
+    let bold = false;
     for (const decl of m[2].split(';')) {
       const i = decl.indexOf(':');
       if (i < 0) continue;
@@ -19,6 +21,8 @@ export function findColorPairs(css) {
       const value = resolveVars(decl.slice(i + 1).replace(/!important/i, '').trim(), vars);
       if (prop === 'color') text = firstColor(value);
       else if (prop === 'background-color' || prop === 'background') background = firstColor(value) ?? background;
+      else if (prop === 'font-size') size = toPx(value);
+      else if (prop === 'font-weight') bold = value === 'bold' || value === 'bolder' || Number(value) >= 700;
     }
     if (text && background) {
       const start = m.index + m[1].length - m[1].trimStart().length;
@@ -27,6 +31,7 @@ export function findColorPairs(css) {
         line: clean.slice(0, start).split('\n').length,
         text,
         background,
+        large: size !== null && (size >= 24 || (size >= 18.66 && bold)),
       });
     }
   }
@@ -39,6 +44,14 @@ function resolveVars(value, vars) {
     value = value.replace(/var\(\s*(--[\w-]+)\s*(?:,\s*([^()]*))?\)/g, (all, name, fallback) => vars.get(name) ?? fallback?.trim() ?? all);
   }
   return value;
+}
+
+// px, pt and rem/em (assuming 16px) font sizes; anything else is unknown.
+function toPx(value) {
+  const m = value.match(/^([\d.]+)(px|pt|r?em)$/);
+  if (!m) return null;
+  const n = Number(m[1]);
+  return m[2] === 'px' ? n : m[2] === 'pt' ? (n * 4) / 3 : n * 16;
 }
 
 function firstColor(value) {

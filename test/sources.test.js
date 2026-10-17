@@ -15,7 +15,7 @@ test('keeps line numbers for <style> blocks in markup', () => {
 <style scoped>
 .x { color: #777; background: #fff; }
 </style>`;
-  assert.deepEqual(findColorPairs(extractCss('a.vue', vue)), [{ selector: '.x', line: 5, text: '#777', background: '#fff' }]);
+  assert.deepEqual(findColorPairs(extractCss('a.vue', vue)), [{ selector: '.x', line: 5, text: '#777', background: '#fff', large: false }]);
 });
 
 test('ignores // comments in SCSS', () => {
