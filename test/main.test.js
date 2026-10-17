@@ -43,3 +43,9 @@ test('uses the 3:1 large-text threshold', async () => {
   const { env, client } = setup({ 'a.css': '.x { color: #777; background: #fff; font-size: 32px; }' });
   assert.equal(await run({ env, client }), 0);
 });
+
+test('suggests a passing text color', async () => {
+  const { env, client, comments } = setup({ 'a.css': '.x { color: #777; background: #fff; }' });
+  await run({ env, client });
+  assert.match(comments[0].body, /\| `#767676` \|/);
+});
