@@ -41,3 +41,10 @@ test('detects large text', () => {
 .d { color: #000; background: #fff; font-size: 18px; font-weight: 700; }`;
   assert.deepEqual(findColorPairs(css).map((p) => p.large), [true, true, true, false]);
 });
+
+test('skips rules marked with x-contrast-ignore', () => {
+  const css = `/* x-contrast-ignore */
+.logo { color: #aaa; background: #fff; }
+.text { color: #777; background: #fff; }`;
+  assert.deepEqual(findColorPairs(css).map((p) => [p.selector, p.line]), [['.text', 3]]);
+});

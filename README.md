@@ -56,6 +56,15 @@ The comment looks like this:
 On pull requests from forks, the default token can't write comments. Set
 `comment: 'false'` there and read the results in the job log instead.
 
+## Skipping a rule
+
+Put `/* x-contrast-ignore */` right before a rule to leave it out, for example a logo with brand colors:
+
+```css
+/* x-contrast-ignore */
+.logo { color: #fbbf24; background: #fff; }
+```
+
 ## How it works
 
 It uses the GitHub REST API to list the PR's changed files, read each `.css`
