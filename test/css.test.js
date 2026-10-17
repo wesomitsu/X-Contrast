@@ -17,9 +17,19 @@ test('finds rules with both colors, with line numbers', () => {
   ]);
 });
 
-test('ignores variables, unknown names and commented-out rules', () => {
+test('ignores unknown variables, unknown names and commented-out rules', () => {
   const css = `.x { color: var(--fg); background: #fff; }
 .y { color: red; background: #fff; }
 /* .z { color: #777; background: #fff; } */`;
   assert.deepEqual(findColorPairs(css), []);
+});
+
+test('resolves CSS variables, fallbacks and nested variables', () => {
+  const css = `:root { --brand: #1d4ed8; --fg: var(--brand); }
+.a { color: var(--fg); background: #fff; }
+.b { color: var(--missing, #777); background: white; }`;
+  assert.deepEqual(findColorPairs(css).map((p) => [p.selector, p.text, p.background]), [
+    ['.a', '#1d4ed8', '#fff'],
+    ['.b', '#777', 'white'],
+  ]);
 });
