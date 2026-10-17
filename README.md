@@ -39,6 +39,7 @@ The comment looks like this:
 | Input | Default | What it does |
 |---|---|---|
 | `level` | `AA` | `AA` (4.5:1, or 3:1 for large text) or `AAA` (7:1, or 4.5:1) |
+| `paths` | (all) | Only check files under these folders, comma or newline separated |
 | `comment` | `true` | Post or update the PR comment |
 | `fail-on-error` | `true` | Fail the job when a pair misses the level |
 | `token` | `github.token` | Token used to read the PR and write the comment |
