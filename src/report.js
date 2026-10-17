@@ -1,9 +1,14 @@
-import { contrastRatio, parseColor, THRESHOLDS } from './contrast.js';
+import { blend, contrastRatio, parseColor, THRESHOLDS } from './contrast.js';
+
+const WHITE = [255, 255, 255];
 
 export function checkPairs(pairs, level = 'AA') {
   const min = THRESHOLDS[level];
   return pairs.map((p) => {
-    const ratio = contrastRatio(parseColor(p.text), parseColor(p.background));
+    // A see-through background is assumed to sit on white; see-through text is
+    // painted over the background before measuring.
+    const bg = blend(parseColor(p.background), WHITE);
+    const ratio = contrastRatio(blend(parseColor(p.text), bg), bg);
     return { ...p, ratio, pass: ratio >= min };
   });
 }

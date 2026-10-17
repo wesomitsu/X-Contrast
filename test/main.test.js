@@ -31,3 +31,10 @@ test('passes when everything meets AA', async () => {
   assert.equal(await run({ env, client }), 0);
   assert.match(comments[0].body, /all 1 color pairs pass/);
 });
+
+test('measures see-through text against its background', async () => {
+  // 50% black on white looks like #808080, which is 3.95:1
+  const { env, client, comments } = setup({ 'a.css': '.x { color: rgba(0, 0, 0, 0.5); background: #fff; }' });
+  assert.equal(await run({ env, client }), 1);
+  assert.match(comments[0].body, /3\.95:1/);
+});
