@@ -5,7 +5,9 @@ const COLOR_TOKEN = /#[\da-f]{3,8}\b|rgba?\([^)]*\)|hsla?\([^)]*\)|\b(?:black|wh
 // Finds rules that set both a text color and a background color, and
 // returns { selector, line, text, background } for each one.
 export function findColorPairs(css) {
-  const clean = css.replace(/\/\*[\s\S]*?\*\//g, (c) => c.replace(/[^\n]/g, ' '));
+  // A rule right after /* x-contrast-ignore */ is skipped.
+  const marked = css.replace(/\/\*\s*x-contrast-ignore\s*\*\/\s*/g, (c) => c.replace(/[^\n]/g, ' ') + '\u0000');
+  const clean = marked.replace(/\/\*[\s\S]*?\*\//g, (c) => c.replace(/[^\n]/g, ' '));
   const vars = new Map();
   for (const m of clean.matchAll(/(--[\w-]+)\s*:\s*([^;{}]+)/g)) vars.set(m[1], m[2].trim());
   const pairs = [];
@@ -24,10 +26,10 @@ export function findColorPairs(css) {
       else if (prop === 'font-size') size = toPx(value);
       else if (prop === 'font-weight') bold = value === 'bold' || value === 'bolder' || Number(value) >= 700;
     }
-    if (text && background) {
+    if (text && background && !m[1].trimStart().startsWith('\u0000')) {
       const start = m.index + m[1].length - m[1].trimStart().length;
       pairs.push({
-        selector: m[1].trim().replace(/\s+/g, ' '),
+        selector: m[1].replace('\u0000', '').trim().replace(/\s+/g, ' '),
         line: clean.slice(0, start).split('\n').length,
         text,
         background,
