@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { appendFileSync, readFileSync } from 'node:fs';
 import { findColorPairs } from './css.js';
 import { createClient } from './github.js';
 import { extractCss, isCheckable } from './sources.js';
@@ -32,6 +32,7 @@ export async function run({ env = process.env, client } = {}) {
 
   const report = formatReport(results, level);
   console.log(report);
+  if (env.GITHUB_STEP_SUMMARY) appendFileSync(env.GITHUB_STEP_SUMMARY, `${report}\n`);
   if (input('comment', 'true') === 'true') await gh.upsertComment(pr.number, report);
 
   const failing = results.filter((r) => !r.pass).length;
