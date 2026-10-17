@@ -1,0 +1,11 @@
+{
+  "name": "x-contrast",
+  "version": "1.0.0",
+  "private": true,
+  "description": "GitHub Action that checks WCAG color contrast in CSS changed by a pull request.",
+  "type": "module",
+  "scripts": { "test": "node --test" },
+  "engines": { "node": ">=20" },
+  "author": "wesomitsu",
+  "license": "MIT"
+}
