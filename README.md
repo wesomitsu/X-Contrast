@@ -45,6 +45,7 @@ The comment looks like this:
 
 ## What it understands
 
+- Files: `.css`, `.scss`, and `<style>` blocks in `.html`, `.vue`, `.svelte` and `.astro`
 - Colors: `#rgb`, `#rrggbb`, `rgb()`, `hsl()`, `black`, `white`
 - Properties: `color` with `background-color` or `background` in the same rule
 - CSS variables, other named colors and transparency are skipped
