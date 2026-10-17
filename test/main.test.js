@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, writeFileSync } from 'node:fs';
+import { mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { run } from '../src/main.js';
@@ -63,4 +63,11 @@ test('paths limits which files are checked', async () => {
   } finally {
     delete process.env.INPUT_PATHS;
   }
+});
+
+test('writes the report to the job summary', async () => {
+  const { env, client } = setup({ 'a.css': '.x { color: #000; background: #fff; }' });
+  env.GITHUB_STEP_SUMMARY = join(mkdtempSync(join(tmpdir(), 'xc-')), 'summary.md');
+  await run({ env, client });
+  assert.match(readFileSync(env.GITHUB_STEP_SUMMARY, 'utf8'), /all 1 color pairs pass/);
 });
