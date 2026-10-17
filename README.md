@@ -25,7 +25,7 @@ jobs:
           level: AA # or AAA
 ```
 
-The same table is added to the run's summary page. The comment looks like this:
+The same table is added to the run's summary page, and each failing rule is flagged on its line in the PR's "Files changed" view. The comment looks like this:
 
 > ### X-Contrast: 1 of 2 color pairs fail WCAG AA
 >

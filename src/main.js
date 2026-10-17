@@ -35,9 +35,18 @@ export async function run({ env = process.env, client } = {}) {
   if (env.GITHUB_STEP_SUMMARY) appendFileSync(env.GITHUB_STEP_SUMMARY, `${report}\n`);
   if (input('comment', 'true') === 'true') await gh.upsertComment(pr.number, report);
 
+  for (const r of results.filter((x) => !x.pass)) console.log(annotation(r, level));
   const failing = results.filter((r) => !r.pass).length;
   if (env.GITHUB_OUTPUT) appendFileSync(env.GITHUB_OUTPUT, `checked=${results.length}\nfailures=${failing}\n`);
   return failing && input('fail-on-error', 'true') === 'true' ? 1 : 0;
+}
+
+// A workflow command that GitHub shows on that line of the PR's diff.
+export function annotation(r, level) {
+  const esc = (v) => String(v).replace(/%/g, '%25').replace(/\r/g, '%0D').replace(/\n/g, '%0A');
+  const prop = (v) => esc(v).replace(/:/g, '%3A').replace(/,/g, '%2C');
+  const tip = r.suggestion ? ` Try ${r.suggestion}.` : '';
+  return `::error file=${prop(r.file)},line=${r.line},title=${prop(`Contrast below WCAG ${level}`)}::${esc(`${r.selector}: ${r.text} on ${r.background} is ${r.ratio.toFixed(2)}:1.${tip}`)}`;
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
