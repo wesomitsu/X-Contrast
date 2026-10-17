@@ -71,3 +71,10 @@ test('writes the report to the job summary', async () => {
   await run({ env, client });
   assert.match(readFileSync(env.GITHUB_STEP_SUMMARY, 'utf8'), /all 1 color pairs pass/);
 });
+
+test('sets checked and failures outputs', async () => {
+  const { env, client } = setup({ 'a.css': '.x { color: #777; background: #fff; } .y { color: #000; background: #fff; }' });
+  env.GITHUB_OUTPUT = join(mkdtempSync(join(tmpdir(), 'xc-')), 'out');
+  await run({ env, client });
+  assert.equal(readFileSync(env.GITHUB_OUTPUT, 'utf8'), 'checked=2\nfailures=1\n');
+});

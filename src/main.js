@@ -36,6 +36,7 @@ export async function run({ env = process.env, client } = {}) {
   if (input('comment', 'true') === 'true') await gh.upsertComment(pr.number, report);
 
   const failing = results.filter((r) => !r.pass).length;
+  if (env.GITHUB_OUTPUT) appendFileSync(env.GITHUB_OUTPUT, `checked=${results.length}\nfailures=${failing}\n`);
   return failing && input('fail-on-error', 'true') === 'true' ? 1 : 0;
 }
 
