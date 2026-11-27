@@ -19,7 +19,7 @@ test('finds rules with both colors, with line numbers', () => {
 
 test('ignores unknown variables, unknown names and commented-out rules', () => {
   const css = `.x { color: var(--fg); background: #fff; }
-.y { color: red; background: #fff; }
+.y { color: currentcolor; background: #fff; }
 /* .z { color: #777; background: #fff; } */`;
   assert.deepEqual(findColorPairs(css), []);
 });
@@ -47,4 +47,9 @@ test('skips rules marked with x-contrast-ignore', () => {
 .logo { color: #aaa; background: #fff; }
 .text { color: #777; background: #fff; }`;
   assert.deepEqual(findColorPairs(css).map((p) => [p.selector, p.line]), [['.text', 3]]);
+});
+
+test('reads named colors, also in the background shorthand', () => {
+  const css = `.n { color: navy; background: url(red.png) no-repeat center ivory; }`;
+  assert.deepEqual(findColorPairs(css), [{ selector: '.n', line: 1, text: 'navy', background: 'ivory', large: false }]);
 });

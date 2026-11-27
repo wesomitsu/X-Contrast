@@ -10,10 +10,12 @@ test('parses supported formats', () => {
   assert.deepEqual(parseColor('rgb(1, 2, 3)'), [1, 2, 3]);
   assert.deepEqual(parseColor('hsl(0, 100%, 50%)'), [255, 0, 0]);
   assert.deepEqual(parseColor('Black'), [0, 0, 0]);
+  assert.deepEqual(parseColor('rebeccapurple'), [102, 51, 153]);
+  assert.deepEqual(parseColor('LightGoldenrodYellow'), [250, 250, 210]);
 });
 
 test('returns null for anything else', () => {
-  for (const v of ['red', 'var(--x)', '#12', 'rgb(300,0,0)', 'rgba(0,0,0,2)', '']) assert.equal(parseColor(v), null, v);
+  for (const v of ['toString', 'currentcolor', 'var(--x)', '#12', 'rgb(300,0,0)', 'rgba(0,0,0,2)', '']) assert.equal(parseColor(v), null, v);
 });
 
 test('known ratios', () => {
