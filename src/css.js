@@ -1,6 +1,6 @@
 import { parseColor } from './contrast.js';
 
-const COLOR_TOKEN = /#[\da-f]{3,8}\b|rgba?\([^)]*\)|hsla?\([^)]*\)|\b(?:black|white|transparent)\b/gi;
+const COLOR_TOKEN = /#[\da-f]{3,8}\b|rgba?\([^)]*\)|hsla?\([^)]*\)|\b[a-z]+\b/gi;
 
 // Finds rules that set both a text color and a background color, and
 // returns { selector, line, text, background } for each one.
@@ -57,7 +57,7 @@ function toPx(value) {
 }
 
 function firstColor(value) {
-  for (const token of value.match(COLOR_TOKEN) ?? []) {
+  for (const token of value.replace(/url\([^)]*\)/gi, '').match(COLOR_TOKEN) ?? []) {
     if (parseColor(token)) return token;
   }
   return null;

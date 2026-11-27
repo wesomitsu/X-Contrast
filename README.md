@@ -62,12 +62,11 @@ The same table is added to the run's summary page, and each failing rule is flag
 ## What it understands
 
 - Files: `.css`, `.scss`, and `<style>` blocks in `.html`, `.vue`, `.svelte` and `.astro`
-- Colors: `#rgb`, `#rgba`, `#rrggbb`, `#rrggbbaa`, `rgb()`, `rgba()`, `hsl()`, `hsla()`, `black`, `white`, `transparent`
+- Colors: `#rgb`, `#rgba`, `#rrggbb`, `#rrggbbaa`, `rgb()`, `rgba()`, `hsl()`, `hsla()`, every CSS named color (`navy`, `rebeccapurple`...) and `transparent`
 - See-through text is blended over its background; a see-through background is assumed to sit on white
 - Properties: `color` with `background-color` or `background` in the same rule
 - CSS variables defined in the same file, including `var(--x, fallback)`
 - Large text: `font-size` of 24px+, or 18.66px+ with bold, in the same rule (px, pt, rem/em at 16px)
-- Other named colors are skipped
 
 On pull requests from forks, the default token can't write comments. Set
 `comment: 'false'` there and read the results in the job log instead.
