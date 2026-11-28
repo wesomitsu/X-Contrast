@@ -36,10 +36,16 @@ const NAMED = Object.fromEntries(
 );
 NAMED.transparent = [0, 0, 0, 0];
 
-// Returns [r, g, b] or [r, g, b, a] for #rgb(a), #rrggbb(aa), rgb(a)(), hsl(a)(),
+// Returns [r, g, b] or [r, g, b, a] for #rgb(a), #rrggbb(aa), rgb(a)(), hsl(a)() (comma or space separated),
 // a named color or transparent; null otherwise.
 export function parseColor(input) {
-  const value = String(input).trim().toLowerCase();
+  let value = String(input).trim().toLowerCase();
+  // Modern space-separated syntax: rgb(29 78 216 / 50%), hsl(220deg 70% 40%).
+  value = value.replace(/^((?:rgb|hsl)a?)\(\s*([^,()\/]+?)\s*(?:\/\s*([^,()\/]+?)\s*)?\)$/, (all, fn, parts, alpha) => {
+    const list = parts.split(/\s+/);
+    return list.length === 3 ? `${fn}(${[...list, ...(alpha ? [alpha] : [])].join(', ')})` : all;
+  });
+  value = value.replace(/^(hsla?\(\s*[\d.]+)deg\b/, '$1');
   if (Object.hasOwn(NAMED, value)) return NAMED[value];
 
   let m = value.match(/^#([\da-f]{3,4}|[\da-f]{6}|[\da-f]{8})$/);

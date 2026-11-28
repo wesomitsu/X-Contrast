@@ -53,3 +53,9 @@ test('reads named colors, also in the background shorthand', () => {
   const css = `.n { color: navy; background: url(red.png) no-repeat center ivory; }`;
   assert.deepEqual(findColorPairs(css), [{ selector: '.n', line: 1, text: 'navy', background: 'ivory', large: false }]);
 });
+
+test('finds pairs written with space-separated rgb()', () => {
+  const [pair] = findColorPairs('.a { color: rgb(255 255 255); background: rgb(29 78 216 / 90%); }');
+  assert.equal(pair.text, 'rgb(255 255 255)');
+  assert.equal(pair.background, 'rgb(29 78 216 / 90%)');
+});

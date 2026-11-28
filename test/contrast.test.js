@@ -37,3 +37,12 @@ test('blends over a background', () => {
   assert.deepEqual(blend([0, 0, 0, 0.5], [255, 255, 255]), [128, 128, 128]);
   assert.deepEqual(blend([1, 2, 3], [9, 9, 9]), [1, 2, 3]);
 });
+
+test('parses space-separated rgb() and hsl()', () => {
+  assert.deepEqual(parseColor('rgb(29 78 216)'), [29, 78, 216]);
+  assert.deepEqual(parseColor('rgb(0 0 0 / 50%)'), [0, 0, 0, 0.5]);
+  assert.deepEqual(parseColor('rgba(10 20 30 / 0.25)'), [10, 20, 30, 0.25]);
+  assert.deepEqual(parseColor('hsl(0deg 100% 50%)'), [255, 0, 0]);
+  assert.deepEqual(parseColor('hsl(0 100% 50% / 1)'), [255, 0, 0]);
+  for (const v of ['rgb(1 2)', 'rgb(1 2 3 4)', 'rgb(300 0 0)', 'rgb(0 0 0 / 2)']) assert.equal(parseColor(v), null, v);
+});
